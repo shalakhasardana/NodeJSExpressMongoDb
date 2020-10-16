@@ -1,0 +1,115 @@
+////// FIRST CLASS FUNCTIONS:
+///Notes:Function treated like any other variable i.e Function can be assigned to variable, 
+///passed around as arguments to other functions, used as the return value of another function
+
+
+
+//////HIGHER ORDER FUNCTIONS
+////Notes: A function that takes another function as an argument or returns a function as its return value
+
+
+
+///////CALLBACK FUNCTIONS
+/// A function that is passed to another function as an argument. 
+///Notes: setTimeOut is higher order function .It first call the function setTimer
+/// wait for 2 second
+/// when timer has fnished, then callback  function is run i.e arrow function. In below example myFunction
+/// call back function is always be the first argument
+/// commonly used to execute async code. A callback is passed into another function as an argument,
+/// then waits for an async operation to finish, such as a setTimeout function or fetching data from a server, before callback is executed
+const myFunction = () => console.log('Timer has finished');
+setTimeout(myFunction, 2000);
+
+///or can be written as
+
+setTimeout(() => console.log("Time has finished"),2000);
+
+
+
+
+////CLOSURES
+//Concept of a closure in programming refers to an inner function that has access to its enclosing scope.
+//when a function is defined inside another function, the inner function automatically gets access to the variables in the outer function
+
+const outerFunc = () => {
+ const x=5;
+ const innerFn = () => console.log(x);
+ innerFn();
+};
+
+
+outerFunc(); ///output is 5 . We didn't pass x in the inner function, but still has access to outer function scope. It is called as closure
+
+///Note:Even if outer function has completed exceution, the inner function still have access to outer function scope
+/// For example, we could rewrite the code like this
+
+const outerFunc = () => {
+    const x=5;
+    const innerFn = () => console.log(x);
+    return innerFn;
+   };
+
+const closureTest = outerFn();
+
+///The value return by outer function here is the defination of inner function not the return value from excuting the code inside inner function but just the function defination of inner function 
+
+/// so if we typed closuretest into the console now
+
+closureTest /// output is () => console.log(x); It means it only contains what inside the inner function and nothing else
+
+///Note:Remember you run a function by adding the paramter list even if empty after the function name thats what tell the function to actually execute  whats inside it., so you see that this is remember that x was 5 inside the ouer function, even though outer function has not be executed
+
+closureTest(); ///output is 5
+
+console.dir(closureTest) /// to give the closer look
+/// output innerFn()-->It will the scopes It will tell from where x value commes, so output something shown like
+
+////[[scopes]] :Scopes[3]-->If you go more inside the 0 value is closure(outerFn) and has x value is =5
+
+///Callbacks and Async computation
+
+
+//sync call: operation 2 depends on operation 1 and operation 3 independent. 
+operation1
+||
+operation2
+||
+operation3/// Note operation 3 is struck in completing both operation 1 and operation 2.even though it is not dependent on any of the operation
+
+///In Asynccall-Good  usecase to use with io operation. To interation with either the file system or network
+
+///Two threads open
+///1-operation1(Long-running)->operation2(callBack)
+///2-Operation3
+
+///Note this type of asyc call in build up in Nodejs called as
+////// THE NODE EVENT LOOP
+
+///Node.js is organized into a single-threaded event loop. Javascript is single-threaded, but mordern system kernels are multi-threaded & can handle multiple parallel operations in background.
+///Node event loop executes incoming requests, one after another
+
+///whenever it needs to, will offload I/O requests to system kernel
+
+/// when finished, system kernel will let Node know so it can queue associated callbacks & eventually execute them via event loop.
+///so eventloop is the continously running loop, which picks the request from the queue and then services them one at a time. 
+///Node js is the single threaded which means only handle one thing at a time. But at a same time, It will deliver more work by doing its time intensive work using callbacks
+
+
+////SIX PHASES OF THE NODE EVENT LOOP
+
+Timer Phase// as Node developer, you will work on this..In this Event Loop executes callbacks scheduled by setTimeOut() or serInterval() functions
+Pending CallBacks Phase// deals with certain system level error callbacks(you will not use this)
+Idle, Prepare Phase// Used internally by node..you will not use this..
+Poll Phase// as Node developer, you will work on this.. Proccesses a queue of callbacks, once the queue is empty, will wait for handle any new requests or timers
+Check Phase// as Node developer, you will work on this.. Handles callbacks from setImmediate() timer function when the queue in poll phase is empty
+Close Callbacks Phase///Hanldes emitting the close event if a socket or handle is closed abruptly(You will not use this)
+
+
+
+
+
+
+
+
+
+
